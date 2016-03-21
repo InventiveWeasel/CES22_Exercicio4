@@ -1,3 +1,9 @@
+class badInputException extends Exception{
+	badInputException(String msg){
+		System.out.println(msg);
+	}
+}
+
 class CalculatorEngine{
 	int value;
 	int keep;
@@ -22,15 +28,19 @@ class CalculatorEngine{
 		binaryOperation('/');
 	}
 	
-	void compute(){
+	void compute() throws badInputException{
 		if (toDo == '+')
 			value = keep + value;
 		else if (toDo == '-')
 			value = keep - value;
 		else if (toDo == '*')
 			value = keep * value;
-		else if (toDo == '/')
+		else if (toDo == '/'){
+			if(value == 0){
+				throw new badInputException("Cannot divide by zero!");
+			}
 			value = keep / value;
+		}
 		keep = 0;
 	}
 	
@@ -57,10 +67,13 @@ public class SimpleCalc {
 		CalculatorEngine calc = new CalculatorEngine();
 		calc.digit(1);
 		calc.digit(3);
-		calc.add();
-		calc.digit(1);
-		calc.digit(1);
-		calc.compute();
-		System.out.println(calc.display());
+		calc.divide();
+		calc.digit(0);
+		try{
+			calc.compute();
+			System.out.println(calc.display());
+		} catch(badInputException e){
+			System.out.println("ERROR");
+		}
 	}
 }
